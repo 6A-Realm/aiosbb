@@ -2,7 +2,7 @@ __all__ = "Validations"
 
 from dataclasses import dataclass
 
-
+"""A mixin class for validating dataclass fields."""
 @dataclass
 class Validations:
     def __post_init__(self) -> None:

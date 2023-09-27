@@ -1,4 +1,7 @@
+"""An asynchronous Python client for controlling SBB devices."""
+
 __all__ = "SBBClient"
+
 
 from asyncio import (
     Semaphore,
@@ -23,6 +26,22 @@ init_commands = ("configure echoCommands 1", "detatchController")
 
 @dataclass
 class SBBClient(Validations):
+    """Asynchronous sys-botbase client/server framework in Python.
+
+    Attributes:
+    ip: The IP address of the sys-botbase device.
+    timeout: The timeout in seconds for all asynchronous operations.
+    verbose: Whether to log debug information.
+    semaphore: A semaphore to ensure that only one transaction can be active at a time.
+    connected: Whether the client is currently connected to the sys-botbase device.
+    reader: A StreamReader object for reading data from the sys-botbase device.
+    writer: A StreamWriter object for writing data to the sys-botbase device.
+    log: A function to log debug information.
+
+    Methods:
+    __call__(*args): Send the specified commands to the sys-botbase device and return the responses.
+    """
+
     ip: str
     timeout: float = 1.0
     verbose: bool = False
@@ -34,12 +53,25 @@ class SBBClient(Validations):
 
     @staticmethod
     def _validate_ip(ip: str, **_: object) -> Optional[str]:
+        """Validate the IP address of the sys-botbase device.
+
+    Args:
+        ip: The IP address to validate.
+
+    Returns:
+        The IP address, if it is valid.
+        None, if the IP address is invalid.
+
+    Raises:
+        ValueError: If the IP address is invalid.
+        """
         if ipv4_pattern.match(ip):
             return ip
         else:
             raise ValueError("ip looks invalid")
 
     def __post_init__(self) -> None:
+        """Initialize the SBBClient."""
         super().__post_init__()
         self.semaphore = Semaphore(1)
         self.connected = False
@@ -50,12 +82,25 @@ class SBBClient(Validations):
             self.log = log.debug
 
     async def _connect(self) -> None:
+        """Connect to the sys-botbase device."""
         self.reader, self.writer = await open_connection(
             self.ip, port=6000, limit=(1024 * 1024)
         )
         self.connected = True
 
     async def __call__(self, *args) -> Union[Tuple[Any, ...], bool, Any]:
+        """Send the specified commands to the sys-botbase device and return the responses.
+
+    Args:
+        *args: The commands to send to the sys-botbase device.
+
+    Returns:
+        A tuple of the responses from the sys-botbase device, if there are multiple responses.
+        A single response from the sys-botbase device, if there is only one response.
+        True, if there are no responses from the sys-botbase device.
+    Raises:
+        TimeoutError
+        """
         res = []
         try:
             if not self.connected:
