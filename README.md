@@ -63,3 +63,11 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 ```
+
+## Usage
+Once an instance of the `SBBClient` class, you can call the `client()` method which takes the name of the command as an argument. For example, to send the `press A` command, you would call the method as follows:
+```py
+select = await client("press A")
+```
+
+The full list of supported [sys-botbase](https://github.com/olliz0r/sys-botbase/tree/master) commands can be [found here](https://github.com/olliz0r/sys-botbase/blob/master/commands.md).

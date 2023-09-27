@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
     # Terminating connection to device.
     await client.disconnect()
     ```
+- When debug is selected, `printDebugResultCodes` is added to the init_commands.
 
 ### Changed
 

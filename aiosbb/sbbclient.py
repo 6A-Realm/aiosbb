@@ -70,7 +70,7 @@ class SBBClient(Validations):
         if ipv4_pattern.match(ip):
             return ip
         else:
-            raise ValueError("ip looks invalid")
+            raise ValueError("[X] The IP address is invalid.")
 
     def __post_init__(self) -> None:
         """Initialize the SBBClient."""
@@ -82,6 +82,8 @@ class SBBClient(Validations):
             self.log = log.info
         else:
             self.log = log.debug
+            init_commands = init_commands + ("configure printDebugResultCodes 1",)
+
 
     async def _connect(self) -> None:
         """Connect to the sys-botbase device."""
