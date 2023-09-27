@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: MIT
+
+from __future__ import annotations
+
 """An asynchronous Python client for controlling SBB devices."""
 
 __all__ = "SBBClient"

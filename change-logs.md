@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
     await client.disconnect()
     ```
 - When debug is selected, `printDebugResultCodes` is added to the init_commands.
+- Tell the Python interpreter to treat type hints as annotations.
 
 ### Changed
 

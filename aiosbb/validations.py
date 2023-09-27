@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: MIT
+
+from __future__ import annotations
+
 __all__ = "Validations"
 
 from dataclasses import dataclass
