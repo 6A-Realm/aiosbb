@@ -1,8 +1,12 @@
 [tool.poetry]
 name = "aiosbb"
-version = "0.1.0"
-description = "asyncio based SysBotBase client"
-authors = ["Z1R343L <jan2705g@egmail.com>"]
+version = "0.1.1"
+description = "Asynchronous sys-botbase client/server framework in Python."
+readme = "README.md"
+authors = ["Z1R343L <jan2705g@egmail.com>", "6A-Realm <6arealm@gmail.com>"]
+requires-python = ">=3.8"
+keywords = ["sys-botbase", "Nintendo"]
+license = {text = "MIT"}
 packages = [
     { include = "aiosbb" },
     { include = "aiosbb/**/*.py" },

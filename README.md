@@ -1,6 +1,65 @@
 # aiosbb
-asyncio based SysBotBase client
+Asynchronous sys-botbase client/server framework in Python.
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/42f0ece5a52f4ca4b495434f62f79a2d)](https://www.codacy.com/gh/Z1R343L/aiosbb/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Z1R343L/aiosbb&amp;utm_campaign=Badge_Grade)
+## Installation
+Python 3.8 or higher is required
 
-![Bildschirmfoto vom 2023-01-30 16-56-55](https://user-images.githubusercontent.com/73044370/215527523-6bef41ab-4f98-4a7e-94ed-4ceffe22a914.png)
+Run the following command to install the library:
+```
+# Linux/macOS
+python3 -m pip install -U aiosbb
+
+# Windows
+py -3 -m pip install -U aiosbb
+```
+
+## Examples
+Examples utilizing this package.
+
+### Quick Example
+```py
+from asyncio import run
+from aiosbb import SBBClient
+
+
+HOST = "192.168.1.2"
+
+async def main() -> None:
+    """Run the SBBClient."""
+    client = SBBClient(HOST)
+
+    """Send and recieve bytes from the sys-botbase device."""
+    title_id = await client("getTitleID")
+    print(title_id)
+
+
+if __name__ == "__main__":
+    run(main())
+```
+
+### Reformatted Into Class
+```py
+import asyncio
+from aiosbb import SBBClient
+
+
+class SBBDevice:
+    def __init__(self, host: str):
+        self.client = SBBClient(host)
+
+    async def get_title_id(self) -> str:
+        """Get the title ID of the sys-botbase device."""
+        return await self.client("getTitleID")
+
+
+async def main():
+    """Run the SBBDevice."""
+    device = SBBDevice(HOST)
+
+    title_id = await device.get_title_id()
+    print(title_id)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```

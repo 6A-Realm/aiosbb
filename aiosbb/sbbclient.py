@@ -43,6 +43,7 @@ class SBBClient(Validations):
     """
 
     ip: str
+    port: int = 6000
     timeout: float = 1.0
     verbose: bool = False
     semaphore: Semaphore = field(init=False)
@@ -84,7 +85,7 @@ class SBBClient(Validations):
     async def _connect(self) -> None:
         """Connect to the sys-botbase device."""
         self.reader, self.writer = await open_connection(
-            self.ip, port=6000, limit=(1024 * 1024)
+            self.ip, self.port, limit=(1024 * 1024)
         )
         self.connected = True
 
