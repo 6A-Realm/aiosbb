@@ -30,6 +30,7 @@ class SBBClient(Validations):
 
     Attributes:
     ip: The IP address of the sys-botbase device.
+    port: The port number of the sys-botbase device.
     timeout: The timeout in seconds for all asynchronous operations.
     verbose: Whether to log debug information.
     semaphore: A semaphore to ensure that only one transaction can be active at a time.
@@ -105,40 +106,40 @@ class SBBClient(Validations):
         res = []
         try:
             if not self.connected:
-                self.log(f"[...] connecting to {self.ip}")
+                self.log(f"[...] Attempting to connecting to {self.ip}")
                 await wait_for(self._connect(), self.timeout)
-                self.log(f"[...] setup connection {self.ip}")
+                self.log(f"[...] Setting up connection to {self.ip}")
                 await wait_for(self(*init_commands), self.timeout)
-                self.log(f"[ok!] connected to {self.ip}")
+                self.log(f"[✓] Successfully connected to {self.ip}")
             await self.semaphore.acquire()
-            self.log("[...] starting transaction")
+            self.log("[...] Waiting for commands")
             for command in args:
-                self.log(f"[>>>] sending {command}")
+                self.log(f"[>>>] Sending {command}")
                 command += "\r\n"
                 self.writer.write(command.encode())
                 await wait_for(self.writer.drain(), self.timeout)
                 while True:
                     r = await wait_for(self.reader.readline(), self.timeout)
                     if r == command.encode():
-                        self.log("[<<<] received command echo")
+                        self.log("[<<<] Received command echo")
                         if "Seq" in command:
-                            self.log("[...] waiting for Sequence to finish")
+                            self.log("[...] Waiting for Sequence to finish")
                             continue
                         break
                     else:
                         response = r[:-1].decode()
-                        self.log(f"[<<<] received response of len {len(response)}")
+                        self.log(f"[<<<] Received response of len {len(response)}")
                         res.append(response)
                         if response == "done":
-                            self.log("[ok!] Sequence finished")
+                            self.log("[✓] Sequence finished")
                             break
                     await sleep(0)
         except TimeoutError:
             self.connected = False
-            log.error("[err] something timed out")
+            log.error("[!] Session timed out")
         finally:
             self.semaphore.release()
-            self.log(f"[ok!] transaction finished with {len(res)} responses!")
+            self.log(f"[✓] Transaction finished with {len(res)} responses!")
         if res:
             if len(res) == 1:
                 return res[0]
@@ -146,3 +147,11 @@ class SBBClient(Validations):
                 return tuple(res)
         else:
             return True
+
+    async def disconnect(self) -> None:
+        """Disconnect from the sys-botbase device."""
+
+        if self.connected:
+            self.reader.close()
+            self.writer.close()
+            self.connected = False
