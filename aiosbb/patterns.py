@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 __all__ = "ipv4_pattern"
 
 from re import compile

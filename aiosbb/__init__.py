@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 """aiosbb: Asynchronous sys-botbase client/server framework in Python."""
 
 __title__ = "aiosbb"

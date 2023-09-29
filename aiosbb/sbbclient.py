@@ -22,6 +22,7 @@ from typing import Any, Callable, Optional, Tuple, Union
 
 from .patterns import ipv4_pattern
 from .validations import Validations
+from .commands import *
 
 log = getLogger()
 
