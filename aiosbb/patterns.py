@@ -5,8 +5,8 @@ __all__ = "ipv4_pattern"
 from re import compile
 
 
-"""IPv4 pattern used by SBBClient._validate_ip()."""
-ipv4_pattern = compile(
-    r"^(([0-9])|([1-9][0-9])|(1([0-9]{2}))|(2[0-4][0-9])|(25[0-5]))((\.(([0-9])|([1-9][0-9])|(1(["
-    r"0-9]{2}))|(2[0-4][0-9])|(25[0-5]))){3})$"
-)
+"""IPv4 regex used to validate IP addresses.
+Matches any string in the format `XXX.XXX.XXX.XXX`, where each `X` is a digit from 0 to 255.
+"""
+ipv4_pattern = compile(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
+
